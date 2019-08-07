@@ -1,0 +1,89 @@
+//
+// Created by scc on 2019/8/7.
+//
+
+#ifndef BITREE_BITREE_H
+#define BITREE_BITREE_H
+
+#include <string>
+#include <iostream>
+#include <algorithm>
+using std::cout;
+using std::max;
+
+struct Node {
+    char data;
+    struct Node *lchild, *rchild;
+};
+
+class BiTree {
+public:
+    BiTree():root(nullptr) {}
+    void Insert(Node* &node);
+    Node*& Get_node() { return root; }
+    void Pretraverse(Node* &node);
+    void Intraverse(Node* &node);
+    void Postraverse(Node* &node);
+    void free(Node* &node);
+    int height(Node* &node);
+    ~BiTree();
+private:
+    Node *root;
+};
+
+void BiTree::Insert(Node* &node) {
+    char ch;
+    if((ch = getchar()) == '#') {
+        node = nullptr;
+    }
+    else {
+        node = new Node();
+        node->data = ch;
+        Insert(node->lchild);
+        Insert(node->rchild);
+    }
+}
+
+void BiTree::Pretraverse(Node* &node) {
+    if(node == nullptr)
+        return;
+    cout << node->data << " ";
+    Pretraverse(node->lchild);
+    Pretraverse(node->rchild);
+}
+
+void BiTree::Intraverse(Node* &node) {
+    if(node == nullptr)
+        return;
+    Intraverse(node->lchild);
+    cout << node->data << " ";
+    Intraverse(node->rchild);
+}
+
+void BiTree::Postraverse(Node* &node) {
+    if(node == nullptr)
+        return;
+    Postraverse(node->lchild);
+    Postraverse(node->rchild);
+    cout << node->data << " ";
+}
+
+void BiTree::free(Node* &node) {
+    if(node == nullptr)
+        return;
+    free(node->lchild);
+    free(node->rchild);
+    delete node;
+}
+
+int BiTree::height(Node *&node) {
+    if(node == nullptr)
+        return 0;
+    else
+        return max(height(node->lchild), height(node->rchild)) + 1;
+}
+
+BiTree::~BiTree() {
+    free(root);
+}
+#endif //BITREE_BITREE_H

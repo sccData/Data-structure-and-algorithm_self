@@ -1,0 +1,14 @@
+#include "BiTree.h"
+
+int main() {
+    BiTree tree;
+    tree.Insert(tree.Get_node());
+    tree.Pretraverse(tree.Get_node());
+    cout << std::endl;
+    tree.Intraverse(tree.Get_node());
+    cout << std::endl;
+    tree.Postraverse(tree.Get_node());
+    cout << std::endl;
+    cout << tree.height(tree.Get_node()) << std::endl;
+    return 0;
+}
