@@ -1,0 +1,145 @@
+//
+// Created by scc on 2019/8/8.
+//
+
+#ifndef BISEARCHTREE_BST_H
+#define BISEARCHTREE_BST_H
+
+#include <iostream>
+using std::cout;
+using std::endl;
+
+struct Node {
+    int data;
+    struct Node *lchild;
+    struct Node *rchild;
+};
+
+class BST {
+public:
+    BST():root(nullptr) {}
+    Node* Get_root() { return root; }
+    void Insert(int data);
+    Node* find(int data);
+    void Delete(int data);
+    void intraverse(Node *node);
+    void free(Node *node);
+    ~BST();
+private:
+    struct Node *root;
+};
+
+void BST::Insert(int data) {
+    if(root == nullptr)
+    {
+        root = new Node();
+        root->data = data;
+        root->lchild = nullptr;
+        root->rchild = nullptr;
+        return;
+    }
+    Node *p = root;
+    while(p != nullptr)
+    {
+        if(p->data < data)
+        {
+            if(p->rchild == nullptr) {
+                p->rchild = new Node();
+                p->rchild->data = data;
+                p->rchild->lchild = nullptr;
+                p->rchild->rchild = nullptr;
+                return;
+            }
+            p = p->rchild;
+        } else {
+            if(p->lchild == nullptr) {
+                p->lchild = new Node();
+                p->lchild->data = data;
+                p->lchild->lchild = nullptr;
+                p->lchild->rchild = nullptr;
+                return;
+            }
+            p = p->lchild;
+        }
+    }
+}
+
+Node* BST::find(int data) {
+
+    Node *p = root;
+    while(p != nullptr)
+    {
+        if(p->data = data)
+            return p;
+        else if(p->data < data)
+        {
+            p = p->lchild;
+        } else {
+            p = p->rchild;
+        }
+    }
+    return nullptr;
+}
+
+void BST::Delete(int data) {
+    Node *p = root;
+    Node *pp = nullptr;
+    while(p != nullptr && p->data != data)
+    {
+        pp = p;
+        if(p->data < data)
+            p = p->rchild;
+        else
+            p = p->lchild;
+    }
+    if(p == nullptr)
+        return;
+    if(p->lchild != nullptr && p->rchild != nullptr)
+    {
+        Node *minP = p->rchild;
+        Node *minPP = p;
+        while(minP->lchild != nullptr)
+        {
+            minPP = minP;
+            minP = minP->lchild;
+        }
+        p->data = minP->data;
+        p = minP;
+        pp = minPP;
+    }
+
+    Node *child;
+    if(p->lchild != nullptr) child = p->lchild;
+    else if(p->rchild != nullptr) child = p->rchild;
+    else child = nullptr;
+
+    if(pp == nullptr)
+        root = child;
+    else if(pp->lchild == p)
+        pp->lchild = child;
+    else
+        pp->rchild = child;
+
+}
+
+void BST::intraverse(Node *node) {
+    if(node == nullptr)
+        return;
+    intraverse(node->lchild);
+    cout << node->data << " ";
+    intraverse(node->rchild);
+}
+
+void BST::free(Node *node) {
+    if(node == nullptr)
+        return;
+    free(node->lchild);
+    free(node->rchild);
+    delete node;
+}
+
+BST::~BST() {
+    free(root);
+}
+
+#endif //BISEARCHTREE_BST_H

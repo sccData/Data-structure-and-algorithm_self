@@ -1,0 +1,18 @@
+#include "BST.h"
+
+int main() {
+    BST root;
+    root.Insert(6);
+    root.Insert(2);
+    root.Insert(1);
+    root.Insert(3);
+    root.Insert(4);
+    root.Insert(5);
+    root.Insert(8);
+    root.Insert(7);
+    root.intraverse(root.Get_root());
+    cout << endl;
+    root.Delete(3);
+    root.intraverse(root.Get_root());
+    return 0;
+}
