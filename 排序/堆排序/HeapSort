@@ -1,0 +1,55 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+
+void heapift(vector<int> &v, int n, int i)
+{
+    while(true) {
+        int index = i;
+        if (i * 2 + 1 <= n && v[i] < v[i * 2 + 1]) {
+            index = i * 2 + 1;
+        }
+
+        if (i * 2 + 2 <= n && v[index] < v[i * 2 + 2]) {
+            index = i * 2 + 2;
+        }
+
+        if (index == i)
+            break;
+        int temp = v[index];
+        v[index] = v[i];
+        v[i] = temp;
+        i = index;
+    }
+}
+
+void BuildHeap(vector<int> &v)
+{
+    int len = v.size() - 1;
+    for(int i=(len-1)/2; i>=1; --i)
+    {
+        heapift(v, len, i);
+    }
+}
+
+void HeapSort(vector<int> &v)
+{
+    for(int i=v.size()-1; i>=1; --i)
+    {
+        int tmp = v[i];
+        v[i] = v[0];
+        v[0] = tmp;
+        int len = i-1;
+        heapift(v, len, 0);
+    }
+}
+
+int main() {
+    vector<int> v{9, 8, 7, 6, 5, 4, 3, 2, 1};
+    BuildHeap(v);
+    HeapSort(v);
+    for(auto c:v)
+        cout << c << " ";
+    cout << endl;
+    return 0;
+}
