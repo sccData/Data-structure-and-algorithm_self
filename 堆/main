@@ -26,17 +26,18 @@ void Heap::Delete() {
     array[1] = array[count];
     count--;
     int i = 1;
-    while(i*2 <= count && i*2+1 <= count) {
+    while(true) {
         int index = i;
-        if(array[i] < array[i*2])
+        if(i*2 <= count && array[i] < array[i*2])
             index = i*2;
-        if(array[i] < array[i*2+1])
+        if(i*2+1 <= count && array[index] < array[i*2+1])
             index = i*2+1;
         if(i == index)
             break;
         int temp = array[i];
         array[i] = array[index];
         array[index] = temp;
+        i = index;
     }
 }
 
