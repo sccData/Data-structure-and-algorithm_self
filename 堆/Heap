@@ -1,0 +1,26 @@
+//
+// Created by scc on 2019/8/15.
+//
+
+#ifndef HEAP_HEAP_H
+#define HEAP_HEAP_H
+class Heap {
+public:
+    Heap(int i):n(i), count(0) {
+        array = new int[n+1];
+    }
+
+    void Insert(int data);
+    void Delete();
+    void Print();
+    ~Heap() {
+        delete [] array;
+    }
+
+private:
+    int n;
+    int count;
+    int *array;
+};
+
+#endif //HEAP_HEAP_H

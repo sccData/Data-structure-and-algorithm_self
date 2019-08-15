@@ -1,0 +1,60 @@
+#include <iostream>
+#include "Heap.h"
+
+void Heap::Insert(int data) {
+    if(count >= n)
+        return;
+    count++;
+    array[count] = data;
+    int i = count;
+    while(i/2>0) {
+        if(array[i] > array[i/2])
+        {
+            int tmp = array[i];
+            array[i] = array[i/2];
+            array[i/2] = tmp;
+        } else {
+            return;
+        }
+        i /= 2;
+    }
+}
+
+void Heap::Delete() {
+    if(count == 0)
+        return;
+    array[1] = array[count];
+    count--;
+    int i = 1;
+    while(i*2 <= count && i*2+1 <= count) {
+        int index = i;
+        if(array[i] < array[i*2])
+            index = i*2;
+        if(array[i] < array[i*2+1])
+            index = i*2+1;
+        if(i == index)
+            break;
+        int temp = array[i];
+        array[i] = array[index];
+        array[index] = temp;
+    }
+}
+
+void Heap::Print() {
+    for(int i=0; i<=count; ++i)
+    {
+        std::cout << array[i] << " ";
+    }
+    std::cout << std::endl;
+}
+int main() {
+    Heap a(10);
+    a.Insert(4);
+    a.Insert(5);
+    a.Insert(6);
+    a.Insert(7);
+    a.Print();
+    a.Delete();
+    a.Print();
+    return 0;
+}
