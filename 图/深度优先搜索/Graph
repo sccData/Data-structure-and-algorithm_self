@@ -1,0 +1,84 @@
+#ifndef GRAPH_H
+#define GRAPH_H
+
+#include <iostream>
+#include <vector>
+#include <deque>
+#include <cstring>
+using namespace std;
+
+class Graph {
+public:
+	Graph(int num):v(num), adj(v, deque<int>()) {}
+	void addEdge(int s, int t);
+	void buildGraph();
+	void dfs(int s, int t);
+	void recur(int s, int t, bool visited[], int prev[]);
+	void print(int s, int t, int prev[]);
+private:
+	int v;
+	bool flag = false;
+	vector<deque<int>> adj;
+};
+
+inline
+void Graph::addEdge(int s, int t)
+{
+	adj[s].push_back(t);
+	adj[t].push_back(s);
+}
+
+inline
+void Graph::buildGraph()
+{
+	int s, t;
+	while(cin >> s >> t)
+	{
+		addEdge(s, t);
+	}
+}
+
+inline
+void Graph::print(int s, int t, int prev[])
+{
+	if(prev[t] != -1 && s != t)
+		print(s, prev[t], prev);
+	cout << t << " ";
+}
+
+inline
+void Graph::recur(int w, int t, bool visited[], int prev[])
+{
+	if(flag == true)
+		return;
+
+	visited[w] = true;
+	if(w == t)
+	{
+		flag = true;
+		return;
+	}
+
+	for(int i=0; i<adj[w].size(); ++i)
+	{
+		int q = adj[w][i];
+		if(!visited[q])
+		{	
+			prev[q] = w;
+			recur(q, t, visited, prev);
+		}
+	}
+}
+
+inline
+void Graph::dfs(int s, int t)
+{
+	int prev[v];
+	bool visited[v];
+	memset(prev, -1, sizeof(prev));
+	recur(s, t, visited, prev);
+	print(s, t, prev);
+}
+
+
+#endif

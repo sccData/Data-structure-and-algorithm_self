@@ -1,0 +1,9 @@
+#include "Graph.h"
+
+int main()
+{
+	Graph g(8);
+	g.buildGraph();
+	g.dfs(0, 7);
+	return 0;
+}

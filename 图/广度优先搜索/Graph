@@ -1,0 +1,83 @@
+#ifndef GRAPH_H
+#define GRAPH_H
+#include <vector>
+#include <deque>
+#include <queue>
+#include <cstring>
+#include <iostream>
+using namespace std;
+
+class Graph {
+public:
+	Graph(int num):v(num), adj(v, deque<int>()) {}
+	void addEdge(int i, int j);
+	void buildGraph();
+	void bfs(int s, int t);
+	void print(int s, int t, int prev[]);
+private:
+	int v;
+	vector<deque<int>> adj;
+};
+
+inline
+void Graph::addEdge(int i, int j)
+{
+	adj[i].push_back(j);
+	adj[j].push_back(i);
+}
+
+inline
+void Graph::buildGraph()
+{
+	int i, j;
+	while(cin >> i >> j)
+	{
+		addEdge(i, j);
+	}
+}
+
+inline
+void Graph::bfs(int s, int t)
+{
+	if(s == t)
+		return;
+	queue<int> q;
+	bool visited[v];
+	int prev[v];
+	memset(prev, -1, sizeof(prev));
+	q.push(s);
+	visited[s] = true;
+	while(!q.empty())
+	{
+		int w = q.front();
+		q.pop();
+
+		for(int i=0; i<adj[w].size(); ++i)
+		{
+			int p = adj[w][i];
+			if(!visited[p])
+			{
+				visited[p] = true;
+				prev[p] = w;
+				q.push(p);
+				if(p == t)
+				{
+					print(s, t, prev);
+					return;
+				}
+			}
+
+
+		}
+	}
+}
+
+inline
+void Graph::print(int s, int t, int prev[])
+{
+	if(prev[t] != -1 && t != s)
+		print(s, prev[t], prev);
+	cout << t << " ";
+}
+
+#endif
