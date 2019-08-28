@@ -1,0 +1,102 @@
+#include <iostream>
+#include <string>
+#include <algorithm>
+using namespace std;
+
+const int Size = 256;
+
+void generateBC(const string& b, int bc[])
+{
+	int m = b.size();
+	for(int i=0; i<Size; ++i)
+	{
+		bc[i] = -1;
+	}
+
+	for(int i=0; i<m; ++i)
+	{
+		int assic = static_cast<int>(b[i]);
+		bc[assic] = i;
+	}
+}
+
+void generateGS(const string& b, int suffix[], bool prefix[])
+{
+	int m = b.size();
+	for(int i=0; i<m; ++i)
+	{
+		suffix[i] = -1;
+		prefix[i] = false;
+	}
+
+	for(int i=0; i<m-1; ++i)
+	{
+		int j = i;
+		int k = 0;
+		while(j>=0 && b[m-1-k] == b[j])
+		{
+			--j;
+			++k;
+			suffix[k] = j+1;
+		}
+		if(j < 0)
+			prefix[k] = true;
+	}
+}
+
+// j表示坏字符对应的模式串中的字符下标; m表示模式串长度
+int moveByGS(int j, int m, int suffix[], bool prefix[])
+{
+	int k = m - 1 - j;
+	if(suffix[k] != -1)
+		return j - suffix[k] + 1;
+	for(int r = j+2; r <= m-1; ++r)
+	{
+		if(prefix[m-r] == true)
+		{
+			return r;
+		}
+	}
+	return m;
+}
+
+int bm(const string& a, const string& b)
+{
+	int i = 0;                 // 模式串与字符串匹配的第一个字符
+	int n = a.size();
+	int m = b.size();
+	int* bc = new int[Size];
+	int* suffix = new int[m];
+	bool* prefix = new bool[m];
+	generateBC(b, bc);
+	generateGS(b, suffix, prefix);
+
+	while(i <= n-m)
+	{
+		int j;
+		for(j=m-1; j>=0; --j)
+		{
+			if(b[j] != a[i+j])
+				break;
+		}
+		if(j < 0)
+			return i;
+		int x = j - bc[static_cast<int>(a[i+j])];
+		int y = 0;
+		if(j < m-1)
+		{
+			y = moveByGS(j, m, suffix, prefix);
+		}
+		i = i + max(x, y);
+
+	}
+	return -1;
+}
+
+int main()
+{
+	string a = "abcdefgh";
+	string b = "de";
+	cout << bm(a, b) << endl;
+	return 0;
+}
