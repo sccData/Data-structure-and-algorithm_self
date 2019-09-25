@@ -1,0 +1,51 @@
+class UnionFindSet {
+public:
+	UnionFindSet(int n):count(n)
+	{
+		parents_ = new int[n];
+		ranks_ = new int[n];
+		for(int i=0; i<n; ++i)
+		{
+			parents_[i] = i;
+			ranks_[i] = i;
+		}
+	}
+
+	int Find(int u);
+	bool Union(int u, int v);
+private:
+	int* parents_;
+	int* ranks_;
+	int count;
+};
+
+inline 
+int Find(int u)
+{
+	while(parents_[u] != u)
+	{
+		parents_[u] = parents_[parents_[u]];
+		u = parents_[u];
+	}
+
+	return u;
+}
+
+inline
+bool Union(int u, int v)
+{
+	int pu = Find(u);
+	int pv = Find(v);
+	if(pu == pv)
+		return false;
+	if(ranks_[pv] > ranks_[pu])
+		parents_[pu] = pv;
+	else if(ranks_[pu] > ranks_[pv])
+		parents_[pv] = pu;
+	else {
+		parents_[pv] = pu;
+		ranks_[pu] += 1;
+	}
+	count--;
+	return true;
+}
